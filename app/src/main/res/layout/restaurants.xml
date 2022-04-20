@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id = "@+id/frame_layout"
+            android:layout_gravity="center"
+            android:orientation = "vertical"
+            />
+
+    <ImageView
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:scaleType="fitXY"
+            android:layout_marginStart="30dp"
+            android:contentDescription="@string/unknown_image"
+            android:layout_marginTop="30dp"
+            android:id="@+id/restaurant_Image"
+
+            />
+
+    <TextView
+            android:id="@+id/restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="60dp"
+            />
+
+    <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="30dp"
+            tools:ignore="RtlHardcoded" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id = "@+id/ratingText"
+            android:layout_marginTop="165dp"
+            android:layout_marginStart="350dp"
+            />
+    <RatingBar
+            android:id = "@+id/ratingbar"
+            android:numStars="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:layout_marginStart="390dp"
+            android:layout_marginTop="150dp" />
+
+    <ImageButton
+            android:id = "@+id/maps_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/google_maps_icon"
+            android:layout_gravity="right"
+            android:layout_marginTop="250dp"
+
+            tools:ignore="RtlHardcoded" />
+    <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:layout_marginStart="350dp"
+            android:id = "@+id/address"
+            />
+
+</merge>
