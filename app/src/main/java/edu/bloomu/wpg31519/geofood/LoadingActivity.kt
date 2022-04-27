@@ -37,7 +37,7 @@ class LoadingActivity : AppCompatActivity() {
     private var longitude:Double = 0.0
     private var priceLow:Int = 0
     private var priceHigh:Int = 0
-    private val apiKey = "AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA"
+    private val apiKey = "Your Api Key"
 
 
 
@@ -87,7 +87,7 @@ class LoadingActivity : AppCompatActivity() {
                   "&opennow=true" +
                 "&minprice=$newLowPrice" +
                 "&maxprice=$newHighPrice" +
-                "&key=AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA"
+                "&key=$apiKey"
 
 
 

@@ -136,10 +136,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         }
 
 
-//        if (!isNetworkAvailable()){
-//            createDialog("No Internet Connection")
-//        }
-
 
         //Adds a dollar sign in the range slider
         priceSlider.setLabelFormatter(LabelFormatter { value ->
@@ -148,9 +144,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
             currencyFormat.format(value.toDouble())
         })
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-
-
         //Prompts the user to enable there location services in higher api devices it
         //lest you pick between the fine and coarse location
         requestPermissions(
@@ -162,25 +155,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
             PERMISSION_REQUEST_ACCESS_LOCATION
         )
 
-
         current = LocationServices.getFusedLocationProviderClient(this)
-        //checks if the location is available if it is not a dialog box appears
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            createDialog("Location Is Unavailable")
-//            return
-//        }
-        //sets the first location of the map
-//        current.lastLocation.addOnCompleteListener { loc ->
-//            if (loc.result != null) {
-//                latitude = loc.result.latitude
-//                longitude = loc.result.longitude
            }
 
 
@@ -255,12 +230,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                 createDialog("Location Is Unavailable")
                 return
             }
-
-
-//            current.lastLocation.addOnCompleteListener { location ->
-////                if (location.result != null) {
-////                    latitude = location.result.latitude
-////                    longitude = location.result.longitude
+            
             if(latitude == 0.0 && longitude == 0.0){
                 createDialog("No marker on the map")
                 return
@@ -273,11 +243,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                     intent.putExtra(PRICERANGEHIGH, priceRangeHigh)
                     intent.putExtra(RADIUS, radius)
                     startActivity(intent)
-
-              //  } else{
-                 //   createDialog("Location Is Unavailable" )
-              //  }
-            //}
         }
 
 
