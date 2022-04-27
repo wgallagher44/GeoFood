@@ -22,6 +22,8 @@ class ResultsActivity : AppCompatActivity() {
 
     companion object{
       const val isEmpty = "Is Empty"
+        const val LATITUDE = "latitude"
+        const val LONGITUDE = "longitude"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +79,8 @@ class ResultsActivity : AppCompatActivity() {
             if(restaurants.isEmpty()) {
                 val intent = Intent(applicationContext,MainActivity::class.java)
                 intent.putExtra(isEmpty,true)
+                intent.putExtra(LONGITUDE,longitude)
+                intent.putExtra(LATITUDE,latitude)
                 startActivity(intent)
                 finish()
 

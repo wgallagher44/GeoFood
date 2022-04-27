@@ -21,6 +21,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -71,8 +74,23 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val isEmpty = intent.extras?.getBoolean(ResultsActivity.isEmpty)
+        val oldLatitude = intent.extras?.getDouble(ResultsActivity.LATITUDE)
+        val oldLongitude = intent.extras?.getDouble(ResultsActivity.LONGITUDE)
         if (isEmpty == true){
             createDialog("No Results Found")
+            lifecycleScope.launch {
+                if (oldLatitude != null) {
+                    latitude = oldLatitude
+                }
+                if (oldLongitude != null) {
+                    longitude = oldLongitude
+                }
+                delay(1000)
+
+                moveMapInstant(10.5f)
+                drawCircle(radius *1609.34)
+            }
+
         }
 
         priceSlider = findViewById(R.id.priceRange)
@@ -89,25 +107,25 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         // updates the zoom of the map to fit the radius of the option circle and saves
         //the value into the radius variable
         radiusSlider.addOnChangeListener { _, rad, _ ->
-            radius = rad
+            if(this.latitude != 0.0 && longitude != 0.0){
+                radius = rad
 
-            if (rad < 9.0f && rad > 6.0f){
-                moveMapInstant(11f)
-            }else if (rad < 6.0f && rad >= 3.0f){
-            moveMapInstant(12f)
-            }else if (rad >= 9.0f && rad < 14.0f){
-            moveMapInstant(10.5f)
-            }else if (rad < 3.0f && rad >= 2.0f){
-                moveMapInstant(13f)
-            }else if (rad < 2.0f){
-                moveMapInstant(14f)
-            }else if (rad > 14.0f){
-                moveMapInstant(10f)
+                if (rad < 9.0f && rad > 6.0f){
+                    moveMapInstant(11f)
+                }else if (rad < 6.0f && rad >= 3.0f){
+                    moveMapInstant(12f)
+                }else if (rad >= 9.0f && rad < 14.0f){
+                    moveMapInstant(10.5f)
+                }else if (rad < 3.0f && rad >= 2.0f){
+                    moveMapInstant(13f)
+                }else if (rad < 2.0f){
+                    moveMapInstant(14f)
+                }else if (rad > 14.0f){
+                    moveMapInstant(10f)
+                }
+                deleteCircle()
+                drawCircle(radius * 1609.34)
             }
-            deleteCircle()
-            drawCircle(radius * 1609.34)
-
-
         }
 
         priceSlider.addOnChangeListener { slider, value, fromUser ->
@@ -243,6 +261,10 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
 ////                if (location.result != null) {
 ////                    latitude = location.result.latitude
 ////                    longitude = location.result.longitude
+            if(latitude == 0.0 && longitude == 0.0){
+                createDialog("No marker on the map")
+                return
+            }
 
                     val intent = Intent(this, LoadingActivity::class.java)
                     intent.putExtra(LATITUDE, latitude)
@@ -354,7 +376,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
      * that location
      */
     fun getCurrentLocation(item:MenuItem){
-
+        mMap.clear()
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION

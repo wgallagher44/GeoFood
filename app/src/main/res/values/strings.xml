@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GeoFood</string>
+    <string name="app_name">Final-Gallagher</string>
     <string name="enter_a_radius">Radius</string>
     <string name="welcome_to_geofood">Welcome To GeoFood</string>
     <string name="enter_type_of_food">Enter Type of Food</string>
