@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
-  <TextView
-          android:id="@+id/WelcomeText"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/welcome_to_geofood"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintBottom_toTopOf="@+id/radiusText"
-          />
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <fragment
+          android:layout_width="match_parent"
+          android:layout_height="600dp"
+          android:id="@+id/map"
+          tools:context=".MapsActivity"
+          android:name="com.google.android.gms.maps.SupportMapFragment"
+
+          tools:ignore="MissingConstraints" />
   <TextView
           android:id="@+id/radiusText"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/enter_a_radius"
-          app:layout_constraintTop_toBottomOf="@id/WelcomeText"
+          android:fontFamily="sans-serif-light"
+          android:textColor="@color/appGray"
+          android:textSize="30sp"
+          app:layout_constraintTop_toBottomOf="@id/map"
           app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toLeftOf="@id/radiusSlide"
-          app:layout_constraintBottom_toTopOf="@id/priceRangeText"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintBottom_toTopOf="@id/radiusSlide"
 
           />
   <com.google.android.material.slider.Slider
-        android:id="@+id/radiusSlide"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
+          android:id="@+id/radiusSlide"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:value = "10"
-          android:valueFrom="0"
+          android:valueFrom="0.5f"
+          android:stepSize="0.5"
           android:valueTo = "20"
-          app:layout_constraintTop_toBottomOf="@+id/WelcomeText"
-          app:layout_constraintLeft_toRightOf="@id/radiusText"
+          app:layout_constraintTop_toBottomOf="@id/radiusText"
+          app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintBottom_toTopOf="@id/priceRangeText"
-        />
+          android:theme="@style/myTheme"
+          />
 
 
 
@@ -46,46 +50,51 @@
           android:layout_height="wrap_content"
           android:id="@+id/priceRangeText"
           android:text="@string/enter_your_price_range"
+          android:fontFamily="sans-serif-light"
+          android:textColor="@color/appGray"
+          android:textSize="30sp"
           app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toLeftOf="@id/priceRange"
-          app:layout_constraintBottom_toTopOf="@id/search_button"
-          app:layout_constraintTop_toBottomOf="@id/radiusText"
-
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintBottom_toTopOf="@id/priceRange"
+          app:layout_constraintTop_toBottomOf="@id/radiusSlide"
           />
-
-
-
-
-
-
-
-
   <com.google.android.material.slider.RangeSlider
           android:id= "@+id/priceRange"
-          android:layout_width="400dp"
+          android:layout_width="match_parent"
+          android:theme="@style/myTheme"
           android:layout_height="wrap_content"
-          android:stepSize="1"
-          android:valueFrom="1"
+          android:stepSize="5"
+          android:valueFrom="0"
 
-          android:valueTo="5"
+          android:valueTo="150"
           app:layout_constraintRight_toRightOf="parent"
           app:values = "@array/initial_slider_val"
           app:layout_constraintLeft_toRightOf="@id/priceRangeText"
-          app:layout_constraintBottom_toTopOf="@id/search_button"
+          app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintTop_toBottomOf="@id/radiusSlide"
           />
 
-  <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/search_button"
-          android:text="@string/search"
-          android:onClick="search"
-          app:layout_constraintTop_toBottomOf="@id/priceRangeText"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          />
+<!--  <Button-->
+<!--          android:layout_width="match_parent"-->
+<!--          android:layout_height="wrap_content"-->
+<!--          android:id="@+id/search_button"-->
+<!--          android:text="@string/search"-->
+<!--          android:onClick="search"-->
+<!--          android:background="@drawable/button_background"-->
+<!--          app:layout_constraintTop_toBottomOf="@id/priceRangeText"-->
+<!--          app:layout_constraintRight_toRightOf="parent"-->
+<!--          app:layout_constraintLeft_toLeftOf="parent"-->
+<!--          app:layout_constraintBottom_toBottomOf="parent"-->
+<!--          />-->
+
+
+
+
+
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

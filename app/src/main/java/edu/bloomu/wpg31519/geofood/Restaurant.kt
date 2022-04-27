@@ -15,10 +15,9 @@ class Restaurant
  */(
     private var name: String,
     private var address: String,
-    private var latitude: Double,
-    private var longitude: Double,
     private var rating: Float,
-    private var photoLink : String
+    private var photoLink : String,
+    private var priceLevel : Int
 ) {
 
     /**
@@ -29,6 +28,13 @@ class Restaurant
     }
 
     /**
+     * gets the price level of the restaurant
+     */
+    fun getPriceLevel():Int{
+        return priceLevel
+    }
+
+    /**
      * Returns the name of the restaurant
      */
     fun getName():String{
@@ -36,25 +42,16 @@ class Restaurant
     }
 
     /**
-     * Returns the latitude of the restaurant
+     * gets the rating of the restaurant
      */
-    fun getLatitude():Double{
-        return this.latitude
-    }
-    /**
-     * Returns the rating of the restaurant
-     */
-    fun getLongitude():Double{
-        return this.longitude
-    }
     fun getRating(): Float{
         return rating
     }
+
+    /**
+     * gets the photo reference
+     */
     fun getLink():String{
         return photoLink
-    }
-
-    override fun toString(): String {
-        return "$name $photoLink \n"
     }
 }

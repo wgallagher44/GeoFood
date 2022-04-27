@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.GeoFood" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.GeoFood" parent="Theme.AppCompat">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -14,5 +14,8 @@
             ?attr/colorPrimaryVariant
         </item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="myTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/appGreen</item>
     </style>
 </resources>

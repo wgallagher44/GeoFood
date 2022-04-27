@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context = "edu.bloomu.wpg31519.geofood.LoadingActivity">
+        <item
+            android:title="@string/cancel_search"
+            android:onClick = "home"
+            app:showAsAction="ifRoom"
+                />
+
+</menu>

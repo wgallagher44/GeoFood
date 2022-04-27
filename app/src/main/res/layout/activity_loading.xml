@@ -13,6 +13,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/Text"
             android:text="@string/loading"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/appGray"
+            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -20,10 +23,11 @@
             app:layout_constraintHorizontal_bias="0.498" />
 
     <ProgressBar
-            android:layout_width="300dp"
-            android:layout_height="237dp"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
             android:id="@+id/progress_horizontal"
             android:indeterminate="true"
+            android:indeterminateTint="@color/appGreen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
