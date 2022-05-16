@@ -37,7 +37,7 @@ class LoadingActivity : AppCompatActivity() {
     private var longitude:Double = 0.0
     private var priceLow:Int = 0
     private var priceHigh:Int = 0
-    private val apiKey = "AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA"
+    private var apiKey = ""
 
 
 
@@ -47,7 +47,7 @@ class LoadingActivity : AppCompatActivity() {
     override  fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-
+        apiKey = resources.getString(R.string.apiKey)
         //Retrieve values from the main activity
         //1609.34 is the constant to convert miles to meters which is used for the api
         // instead of miles
@@ -56,8 +56,6 @@ class LoadingActivity : AppCompatActivity() {
         longitude = intent.extras!!.getDouble(MainActivity.LONGITUDE)
         priceLow = intent.extras!!.getInt(MainActivity.PRICERANGELOW)
         priceHigh = intent.extras!!.getInt(MainActivity.PRICERANGEHIGH)
-        println(priceHigh)
-        println(priceLow)
         //converts the minimum/maximum price into price levels where 1 is > 10
         //2 is between 10 and 25 exclusive 3 = 25 - 50 exclusive and 4 if the price is
         //greater than 50
@@ -87,7 +85,7 @@ class LoadingActivity : AppCompatActivity() {
                   "&opennow=true" +
                 "&minprice=$newLowPrice" +
                 "&maxprice=$newHighPrice" +
-                "&key=AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA"
+                "&key=$apiKey"
 
 
 

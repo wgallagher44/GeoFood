@@ -17,9 +17,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity
-            android:name=".NoResultsActivity"
-            android:exported="false" />
+
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -33,7 +31,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA" />
+            android:value="@string/apiKey" />
 
         <activity
             android:name=".ResultsActivity"

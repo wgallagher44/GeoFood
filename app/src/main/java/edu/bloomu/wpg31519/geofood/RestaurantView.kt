@@ -55,7 +55,7 @@ class RestaurantView(context: Context) : FrameLayout(context) {
                     "https://maps.googleapis.com/maps/api/place/photo" +
                             "?maxwidth=" + 300 +
                             "&photo_reference=" + restaurant.getLink() +
-                            "&key=AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA"
+                            "&key=${resources.getString(R.string.apiKey)}"
                 ).into(restaurantPicture)
             }
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "264646509761",
+    "project_id": "geofood-344817",
+    "storage_bucket": "geofood-344817.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264646509761:android:450bba8dafc416a3338040",
+        "android_client_info": {
+          "package_name": "edu.bloomu.wpg31519.geofood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264646509761-vf47e33p1naq56faqscgdmg9r7io0tai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjL_JOTdhU8wt_RtAUExaMfMvcvvJTGtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264646509761-vf47e33p1naq56faqscgdmg9r7io0tai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

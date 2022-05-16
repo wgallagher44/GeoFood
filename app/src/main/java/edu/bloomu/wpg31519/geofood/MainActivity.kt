@@ -109,20 +109,8 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         radiusSlider.addOnChangeListener { _, rad, _ ->
             if(this.latitude != 0.0 && longitude != 0.0){
                 radius = rad
-
-                if (rad < 9.0f && rad > 6.0f){
-                    moveMapInstant(11f)
-                }else if (rad < 6.0f && rad >= 3.0f){
-                    moveMapInstant(12f)
-                }else if (rad >= 9.0f && rad < 14.0f){
-                    moveMapInstant(10.5f)
-                }else if (rad < 3.0f && rad >= 2.0f){
-                    moveMapInstant(13f)
-                }else if (rad < 2.0f){
-                    moveMapInstant(14f)
-                }else if (rad > 14.0f){
-                    moveMapInstant(10f)
-                }
+               val zoom = setZoom(rad.toDouble())
+                moveMapInstant(zoom)
                 deleteCircle()
                 drawCircle(radius * 1609.34)
             }
@@ -136,10 +124,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         }
 
 
-//        if (!isNetworkAvailable()){
-//            createDialog("No Internet Connection")
-//        }
-
 
         //Adds a dollar sign in the range slider
         priceSlider.setLabelFormatter(LabelFormatter { value ->
@@ -148,9 +132,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
             currencyFormat.format(value.toDouble())
         })
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-
-
         //Prompts the user to enable there location services in higher api devices it
         //lest you pick between the fine and coarse location
         requestPermissions(
@@ -162,25 +143,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
             PERMISSION_REQUEST_ACCESS_LOCATION
         )
 
-
         current = LocationServices.getFusedLocationProviderClient(this)
-        //checks if the location is available if it is not a dialog box appears
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            createDialog("Location Is Unavailable")
-//            return
-//        }
-        //sets the first location of the map
-//        current.lastLocation.addOnCompleteListener { loc ->
-//            if (loc.result != null) {
-//                latitude = loc.result.latitude
-//                longitude = loc.result.longitude
            }
 
 
@@ -256,11 +219,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                 return
             }
 
-
-//            current.lastLocation.addOnCompleteListener { location ->
-////                if (location.result != null) {
-////                    latitude = location.result.latitude
-////                    longitude = location.result.longitude
             if(latitude == 0.0 && longitude == 0.0){
                 createDialog("No marker on the map")
                 return
@@ -273,11 +231,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                     intent.putExtra(PRICERANGEHIGH, priceRangeHigh)
                     intent.putExtra(RADIUS, radius)
                     startActivity(intent)
-
-              //  } else{
-                 //   createDialog("Location Is Unavailable" )
-              //  }
-            //}
         }
 
 
@@ -297,8 +250,8 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
             latitude = it.latitude
             longitude = it.longitude
             mMap.addMarker(MarkerOptions().position(it).draggable(false))
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it,10.5f
-            ),3000, null)
+         val zoom =  setZoom(radius.toDouble())
+            moveMap(zoom)
             drawCircle(radius * 1609.34)
         }
     }
@@ -399,6 +352,36 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                 createDialog("Location Not Available")
             }
         }
+    }
+
+    /**
+     * Resets the markers on the map and zooms it the inital state of the map
+     */
+    fun reset(item: MenuItem){
+        mMap.clear()
+        val location = LatLng( 39.085558,-103.944515)
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,5f),
+            3000,null)
+
+    }
+    private fun setZoom(rad: Double):Float{
+        if (rad < 9.0f && rad > 6.0f){
+            return 11f
+
+        }else if (rad < 6.0f && rad >= 3.0f){
+            return 12f
+        }else if (rad >= 9.0f && rad < 14.0f){
+          return 10.5f
+        }else if (rad < 3.0f && rad >= 2.0f){
+            return (13f)
+        }else if (rad < 2.0f){
+            return (14f)
+        }else if (rad > 14 && rad < 16.0f){
+            return (10f)
+        }else if (rad >= 16.0f){
+            return 9.7f
+        }
+        return 10.5f
     }
 
 }

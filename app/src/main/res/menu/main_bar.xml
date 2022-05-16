@@ -22,6 +22,10 @@
             <item
                 android:title="@string/about_geofood"
                 android:onClick="aboutGeoFood"/>
+            <item
+                android:title="@string/reset_map"
+                android:onClick="reset"
+                    />
 
 
 
