@@ -219,7 +219,6 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                 createDialog("Location Is Unavailable")
                 return
             }
-
             if(latitude == 0.0 && longitude == 0.0){
                 createDialog("No marker on the map")
                 return
