@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -382,6 +383,11 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
             return 9.7f
         }
         return 10.5f
+    }
+
+    fun logout(item: MenuItem) {
+        FirebaseAuth.getInstance().signOut()
+        startActivity(Intent(this@MainActivity,LoginActivity::class.java))
     }
 
 }

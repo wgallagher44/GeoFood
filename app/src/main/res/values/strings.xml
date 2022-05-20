@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Final-Gallagher</string>
+    <string name="app_name">GeoFood</string>
     <string name="enter_a_radius">Radius</string>
     <string name="welcome_to_geofood">Welcome To GeoFood</string>
     <string name="enter_type_of_food">Enter Type of Food</string>
@@ -7,7 +7,7 @@
     <string name="enter_your_price_range">Price Range</string>
     <string name="back">Back</string>
     <string name="next_page">Next Page</string>
-    <string name ="apiKey">"AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA"</string>
+
     <string name="to_main_menu">To Main Menu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -22,4 +22,20 @@
     <string name="current_location">Current Location</string>
     <string name="about_geofood">About Geofood</string>
     <string name="reset_map">Reset Map</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="password"> Password</string>
+    <string name="username"> Username</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="logout">Logout</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="email">Email</string>
+    <string name="enter_the_following_information">Enter The Following Information</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+
+    <string name="confirm_password">Confirm Password</string>
+    <string name="reset">Reset</string>
+
 </resources>

@@ -26,6 +26,9 @@
                 android:title="@string/reset_map"
                 android:onClick="reset"
                     />
+            <item
+                android:title="@string/logout"
+                android:onClick="logout"/>
 
 
 
