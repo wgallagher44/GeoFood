@@ -33,6 +33,8 @@ import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -55,16 +57,20 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
     private lateinit var radiusSlider: Slider
     private lateinit var locationManager: LocationManager
     private lateinit var current: FusedLocationProviderClient
+
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     private var radius:Float = 10.0f
     var priceRangeLow = 0
     private var priceRangeHigh = 150
+    private  var user:FirebaseUser? = null
+
 
     companion object {
         const val LATITUDE = "latitude"
         const val LONGITUDE = "longitude"
         const val RADIUS = "radius"
+        const val USER = "user"
         const val PRICERANGELOW = "price range low"
         const val PRICERANGEHIGH = "price range high"
         const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
@@ -74,6 +80,8 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        user = FirebaseAuth.getInstance().currentUser
         val isEmpty = intent.extras?.getBoolean(ResultsActivity.isEmpty)
         val oldLatitude = intent.extras?.getDouble(ResultsActivity.LATITUDE)
         val oldLongitude = intent.extras?.getDouble(ResultsActivity.LONGITUDE)
@@ -86,6 +94,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                 if (oldLongitude != null) {
                     longitude = oldLongitude
                 }
+
                 delay(1000)
 
                 moveMapInstant(10.5f)
@@ -226,6 +235,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
 
                     val intent = Intent(this, LoadingActivity::class.java)
                     intent.putExtra(LATITUDE, latitude)
+                    intent.putExtra(USER,user)
                     intent.putExtra(LONGITUDE, longitude)
                     intent.putExtra(PRICERANGELOW, priceRangeLow)
                     intent.putExtra(PRICERANGEHIGH, priceRangeHigh)
@@ -387,6 +397,12 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
     fun logout(item: MenuItem) {
         FirebaseAuth.getInstance().signOut()
         startActivity(Intent(this@MainActivity,LoginActivity::class.java))
+    }
+
+    fun savedRestaurants(item: MenuItem) {
+        if (user == null){
+            createDialog("Not Logged into GeoFood")
+        }
     }
 
 }

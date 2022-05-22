@@ -9,6 +9,11 @@ import android.view.LayoutInflater
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.init
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 /**
@@ -25,6 +30,10 @@ class RestaurantView(context: Context) : FrameLayout(context) {
     private var ratingBar: RatingBar
     private var address:TextView
     private var priceLevel:TextView
+    private var heartButton:RadioButton
+
+    private lateinit var reference:DatabaseReference
+
 
     /**
      * Initializes all the text views, rating bar, image view and image button with the id
@@ -42,14 +51,22 @@ class RestaurantView(context: Context) : FrameLayout(context) {
         ratingText = findViewById(R.id.ratingText)
         address = findViewById(R.id.address)
         priceLevel = findViewById(R.id.price)
+        heartButton = findViewById(R.id.heart_button)
+
     }
 
     /**
      * sets all of the xml components from the restaurant values
      */
     fun loadElements(
-        restaurant: Restaurant,
+        restaurant: Restaurant,user: FirebaseUser?
     ) {
+        var userId = ""
+        if (user != null) {
+            userId = user.uid
+            reference = FirebaseDatabase.getInstance().getReference("Users").child(userId).
+            child("List")
+        }
             if (restaurant.getLink() != "") {
                 Glide.with(this).load(
                     "https://maps.googleapis.com/maps/api/place/photo" +
@@ -86,7 +103,7 @@ class RestaurantView(context: Context) : FrameLayout(context) {
         }
 
 
-        icon.setOnClickListener{view ->
+        icon.setOnClickListener{
             val formattedAddress = restaurant.getAddress().replace(" "
                 , "+")
             val addressUrl = Uri.parse("google.navigation:q=$formattedAddress")
@@ -96,9 +113,35 @@ class RestaurantView(context: Context) : FrameLayout(context) {
 
 
         }
+        var isChecked = false
+        heartButton.setOnClickListener {
+            if (user != null ){
+                if (!isChecked){
+                    val childRef = reference.push()
+                    childRef.setValue(restaurant)
+                    heartButton.isChecked = true
+                    isChecked = true
+                }else{
+                    val childRef = reference.push()
+                    childRef.removeValue().addOnCompleteListener{
+
+                    }
+                    heartButton.isChecked = false
+                    isChecked = false
+                }
+
+
+            }
+
+
+
+
+            }
+
+        }
+
 
 
     }
 
 
-}

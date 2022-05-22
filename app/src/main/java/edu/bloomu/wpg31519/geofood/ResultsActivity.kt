@@ -9,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -24,7 +26,9 @@ class ResultsActivity : AppCompatActivity() {
       const val isEmpty = "Is Empty"
         const val LATITUDE = "latitude"
         const val LONGITUDE = "longitude"
+
     }
+    private  var user:FirebaseUser? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
@@ -32,7 +36,7 @@ class ResultsActivity : AppCompatActivity() {
         val json = intent.extras?.getStringArrayList(LoadingActivity.JSON)
         val latitude = intent.extras!!.getDouble(LoadingActivity.LATITUDE)
         val longitude = intent.extras!!.getDouble(LoadingActivity.LONGITUDE)
-
+       user = FirebaseAuth.getInstance().currentUser
         val restaurants:ArrayList<Restaurant> = ArrayList()
 
 
@@ -81,6 +85,7 @@ class ResultsActivity : AppCompatActivity() {
                 intent.putExtra(isEmpty,true)
                 intent.putExtra(LONGITUDE,longitude)
                 intent.putExtra(LATITUDE,latitude)
+
                 startActivity(intent)
                 finish()
 
@@ -88,10 +93,11 @@ class ResultsActivity : AppCompatActivity() {
             //adds restaurant values to compound component and adds the component to the
         // table layout
             val tableLayout = findViewById<TableLayout>(R.id.table_layout)
+
             for (i in 0 until restaurants.size) {
 
                 val restaurantView = RestaurantView(this)
-                restaurantView.loadElements(restaurants[i])
+                restaurantView.loadElements(restaurants[i],user)
                 restaurantView.setBackgroundResource(R.drawable.boarder)
                 tableLayout.addView(restaurantView)
 

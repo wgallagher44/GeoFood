@@ -90,12 +90,14 @@ class RegisterActivity : AppCompatActivity() {
                     this
                 ) { task ->
                     if (task.isSuccessful) {
+
                         // Sign in success, update UI with the signed-in user's information
                         val user = User(firstName, lastName,email)
                         val userId = task.result!!.user!!.uid
                         val database = Firebase.database
-                        val ref = database.getReference(userId)
-                        ref.setValue(user)
+                        val ref = database.getReference("Users").child(userId)
+
+                        ref.push().setValue(user)
                         Toast.makeText(this@RegisterActivity, "User Has Been Created",
                             Toast.LENGTH_LONG).show()
                     }

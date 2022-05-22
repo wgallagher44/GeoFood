@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -31,6 +32,7 @@ class LoadingActivity : AppCompatActivity() {
         const val LATITUDE = "latitude"
         const val LONGITUDE = "longitude"
 
+
     }
     private  var radius:Float = 0.0f
     private var latitude:Double = 0.0
@@ -38,6 +40,7 @@ class LoadingActivity : AppCompatActivity() {
     private var priceLow:Int = 0
     private var priceHigh:Int = 0
     private var apiKey = ""
+
 
 
 
@@ -56,6 +59,9 @@ class LoadingActivity : AppCompatActivity() {
         longitude = intent.extras!!.getDouble(MainActivity.LONGITUDE)
         priceLow = intent.extras!!.getInt(MainActivity.PRICERANGELOW)
         priceHigh = intent.extras!!.getInt(MainActivity.PRICERANGEHIGH)
+
+
+
         //converts the minimum/maximum price into price levels where 1 is > 10
         //2 is between 10 and 25 exclusive 3 = 25 - 50 exclusive and 4 if the price is
         //greater than 50
@@ -120,6 +126,7 @@ class LoadingActivity : AppCompatActivity() {
             intent.putExtra(JSON,jsonList)
             intent.putExtra(LATITUDE,latitude)
             intent.putExtra(LONGITUDE,longitude)
+
             finish()
 
             startActivity(intent)
