@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 
 import android.widget.*
@@ -12,8 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.init
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 
 /**
@@ -61,6 +61,7 @@ class RestaurantView(context: Context) : FrameLayout(context) {
     fun loadElements(
         restaurant: Restaurant,user: FirebaseUser?
     ) {
+        var stringList = ArrayList<String>()
         var userId = ""
         if (user != null) {
             userId = user.uid
@@ -122,14 +123,53 @@ class RestaurantView(context: Context) : FrameLayout(context) {
                     heartButton.isChecked = true
                     isChecked = true
                 }else{
-                    val childRef = reference.push()
-                    childRef.removeValue().addOnCompleteListener{
+                    reference.addValueEventListener( object:ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()){
+                                for (postSnapshot in snapshot.children) {
 
+                             
+                                }
+//                                list.forEach{ it->
+//                                  val key =  it.key.toString()
+//
+//                                    if (it.hasChild("address") && it.hasChild("link")
+//                                        && it.hasChild("name") &&
+//                                        it.hasChild("priceLevel") &&
+//                                        it.hasChild("rating")){
+
+//                                            val currentRestaurant = it.getValue(Restaurant::class.java)
+//                                            print(currentRestaurant)
+                                        //val name = it.child("name").toString()
+//                                        val link = it.child("link").toString()
+//                                        val priceLevel:Int = it.child("priceLevel")
+//                                            .toString().toInt()
+//                                        val rating = it.child("rating").toString().toFloat()
+//                                        val currentRestaurant =
+//                                            address?.let { it1 ->
+//                                                Restaurant(name, it1,rating,link,priceLevel,key)
+//                                            }
+
+
+
+
+                                 //   }
+
+                                }
+                        }
+                        override fun onCancelled(error: DatabaseError) {}
                     }
+
+
+
+
+
+
+
+
+                )
                     heartButton.isChecked = false
                     isChecked = false
-                }
-
 
             }
 
@@ -143,5 +183,6 @@ class RestaurantView(context: Context) : FrameLayout(context) {
 
 
     }
+}
 
 

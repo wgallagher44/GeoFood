@@ -9,16 +9,34 @@ import kotlin.properties.Delegates
  *
  * @author Will Gallagher
  */
-class Restaurant
-/**
- * Initializes the name, address, latitude, longitude and rating of the restaurant
- */(
-    private var name: String,
-    private var address: String,
-    private var rating: Float,
-    private var photoLink : String,
-    private var priceLevel : Int
-) {
+class Restaurant{
+
+private var name: String
+private var address: String
+private var rating: Float
+private var photoLink : String
+private var priceLevel : Int
+private lateinit var key:String
+
+constructor(name:String,address:String,rating:Float,photoLink:String,priceLevel:Int){
+    this.name = name
+    this.address = address
+    this.photoLink = photoLink
+    this.priceLevel = priceLevel
+    this.rating = rating
+
+
+}constructor(name:String,address:String,rating:Float,photoLink:String,priceLevel:Int,key:String){
+        this.name = name
+        this.address = address
+        this.photoLink = photoLink
+        this.priceLevel = priceLevel
+        this.rating = rating
+        this.key = key
+
+    }
+
+
 
     /**
      * Returns the address of the restaurant
