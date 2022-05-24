@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 
 import android.widget.*
@@ -12,8 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.init
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 
 /**
@@ -61,6 +61,7 @@ class RestaurantView(context: Context) : FrameLayout(context) {
     fun loadElements(
         restaurant: Restaurant,user: FirebaseUser?
     ) {
+        var restaurantList = ArrayList<Restaurant>()
         var userId = ""
         if (user != null) {
             userId = user.uid
@@ -101,7 +102,22 @@ class RestaurantView(context: Context) : FrameLayout(context) {
             restaurant.getPriceLevel() == 4 -> "Very Expensive\n <$50"
             else->""
         }
+        reference.addValueEventListener( object:ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    for (postSnapshot in snapshot.children) {
+                        val restaurant = postSnapshot.getValue(Restaurant::class.java)
+                        if (restaurant != null) {
+                            restaurantList.add(restaurant)
+                        }
+                    }
 
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        }
+
+        )
 
         icon.setOnClickListener{
             val formattedAddress = restaurant.getAddress().replace(" "
@@ -122,14 +138,9 @@ class RestaurantView(context: Context) : FrameLayout(context) {
                     heartButton.isChecked = true
                     isChecked = true
                 }else{
-                    val childRef = reference.push()
-                    childRef.removeValue().addOnCompleteListener{
 
-                    }
                     heartButton.isChecked = false
                     isChecked = false
-                }
-
 
             }
 
@@ -143,5 +154,6 @@ class RestaurantView(context: Context) : FrameLayout(context) {
 
 
     }
+}
 
 
