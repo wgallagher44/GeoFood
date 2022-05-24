@@ -138,7 +138,6 @@ class RestaurantView(context: Context) : FrameLayout(context) {
                     heartButton.isChecked = true
                     isChecked = true
                 }else{
-
                     heartButton.isChecked = false
                     isChecked = false
 
