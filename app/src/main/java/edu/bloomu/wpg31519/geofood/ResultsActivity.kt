@@ -1,12 +1,11 @@
 package edu.bloomu.wpg31519.geofood
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.RadioButton
 import android.widget.TableLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +28,7 @@ class ResultsActivity : AppCompatActivity() {
 
     }
     private  var user:FirebaseUser? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
@@ -74,7 +74,7 @@ class ResultsActivity : AppCompatActivity() {
 
 
                     val restaurant = Restaurant(
-                        name, address, rating.toFloat(), photoReference,priceLevel
+                        name, address, rating.toFloat(), photoReference,priceLevel,""
                     )
                     restaurants.add(restaurant)
                 }
@@ -95,12 +95,10 @@ class ResultsActivity : AppCompatActivity() {
             val tableLayout = findViewById<TableLayout>(R.id.table_layout)
 
             for (i in 0 until restaurants.size) {
-
                 val restaurantView = RestaurantView(this)
                 restaurantView.loadElements(restaurants[i],user)
                 restaurantView.setBackgroundResource(R.drawable.boarder)
                 tableLayout.addView(restaurantView)
-
             }
     }
 
@@ -120,6 +118,7 @@ class ResultsActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
 
 
 }

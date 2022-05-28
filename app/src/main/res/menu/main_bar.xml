@@ -27,6 +27,11 @@
                 android:onClick="reset"
                     />
             <item
+                android:title="@string/saved_restaurants"
+                android:onClick="savedRestaurants"
+                android:id = "@+id/save_restaurants"
+                />
+            <item
                 android:title="@string/logout"
                 android:onClick="logout"/>
 

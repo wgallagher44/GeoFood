@@ -1,5 +1,7 @@
 package edu.bloomu.wpg31519.geofood
 
+import java.io.Serializable
+import java.util.*
 import kotlin.properties.Delegates
 
 /**
@@ -14,7 +16,7 @@ import kotlin.properties.Delegates
 //                      var rating:Float?=null,var photoLink:String?=null,
 //                      var priceLevel:Int?,var key:String?=null)
 
-class Restaurant{
+class Restaurant:Serializable{
 
 private var name: String
 private var address: String
@@ -79,6 +81,9 @@ constructor(name:String,address:String,rating:Float,photoLink:String,priceLevel:
     fun getRating(): Float{
         return rating
     }
+    fun getKey():String{
+        return key
+    }
 
     /**
      * gets the photo reference
@@ -88,6 +93,12 @@ constructor(name:String,address:String,rating:Float,photoLink:String,priceLevel:
     }
     fun setLink(link:String){
         this.photoLink = link
+    }
+    fun setPhotoLink(link:String){
+        this.photoLink = link
+    }
+    fun getPhotoLink():String{
+        return this.photoLink
     }
     fun setName(name:String){
         this.name = name
@@ -103,5 +114,24 @@ constructor(name:String,address:String,rating:Float,photoLink:String,priceLevel:
     }
     fun setKey(key: String){
         this.key = key
+    }
+
+    override fun equals(other: Any?): Boolean {
+      val res = other as Restaurant
+        if(priceLevel != res.getPriceLevel())return false
+        if (rating != res.getRating()) return false
+        if (name != res.getName()) return false
+        if (photoLink != res.getLink()) return false
+        if (address != res.getAddress()) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+       var result = priceLevel.hashCode()
+        result = 31 * result + rating.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + photoLink.hashCode()
+        result = 31 * result + address.hashCode()
+        return result
     }
 }

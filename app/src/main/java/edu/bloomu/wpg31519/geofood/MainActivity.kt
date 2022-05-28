@@ -3,6 +3,7 @@ package edu.bloomu.wpg31519.geofood
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,7 +17,9 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,7 +37,7 @@ import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -57,23 +60,27 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
     private lateinit var radiusSlider: Slider
     private lateinit var locationManager: LocationManager
     private lateinit var current: FusedLocationProviderClient
-
+    private lateinit var reference: DatabaseReference
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     private var radius:Float = 10.0f
     var priceRangeLow = 0
     private var priceRangeHigh = 150
     private  var user:FirebaseUser? = null
-
+    private var noResults:Boolean = false
 
     companion object {
         const val LATITUDE = "latitude"
         const val LONGITUDE = "longitude"
         const val RADIUS = "radius"
         const val USER = "user"
+        const val RESTAURANTS = "Restaurant List"
+        const val KEYS = "List of restaurant keys"
         const val PRICERANGELOW = "price range low"
         const val PRICERANGEHIGH = "price range high"
         const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
+        const val isDatabase = "True if database call"
+        const val isLogout = "True if logging out"
 
     }
 
@@ -81,11 +88,13 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        user = FirebaseAuth.getInstance().currentUser
+
+
         val isEmpty = intent.extras?.getBoolean(ResultsActivity.isEmpty)
         val oldLatitude = intent.extras?.getDouble(ResultsActivity.LATITUDE)
         val oldLongitude = intent.extras?.getDouble(ResultsActivity.LONGITUDE)
-        if (isEmpty == true){
+        //noResults = intent.extras!!.getBoolean(LoadingActivity.noResults)
+        if (isEmpty == true ){
             createDialog("No Results Found")
             lifecycleScope.launch {
                 if (oldLatitude != null) {
@@ -202,6 +211,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
      * Creates the Menu Bar
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
         menuInflater.inflate(R.menu.main_bar,menu)
         return true
     }
@@ -240,6 +250,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
                     intent.putExtra(PRICERANGELOW, priceRangeLow)
                     intent.putExtra(PRICERANGEHIGH, priceRangeHigh)
                     intent.putExtra(RADIUS, radius)
+                    intent.putExtra(isDatabase,false)
                     startActivity(intent)
         }
 
@@ -396,14 +407,20 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
 
     fun logout(item: MenuItem) {
         FirebaseAuth.getInstance().signOut()
-        startActivity(Intent(this@MainActivity,LoginActivity::class.java))
+       val i = Intent(this@MainActivity,LoginActivity::class.java)
+        i.putExtra(isLogout ,true)
+        startActivity(i)
     }
 
     fun savedRestaurants(item: MenuItem) {
-        if (user == null){
-            createDialog("Not Logged into GeoFood")
-        }
+
+        val intent = Intent(this@MainActivity
+            ,LoadingActivity::class.java)
+       intent.putExtra(isDatabase,true)
+        startActivity(intent)
+
     }
+
 
 }
 

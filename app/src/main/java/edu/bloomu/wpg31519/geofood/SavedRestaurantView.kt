@@ -17,7 +17,7 @@ import com.google.firebase.database.*
  * image button.
  * @author Will Gallagher
  */
-class RestaurantView(context: Context) : FrameLayout(context) {
+class SavedRestaurantView(context: Context) : FrameLayout(context) {
     private var restaurantPicture:ImageView
     private var title:TextView
     private var ratingText:TextView
@@ -39,7 +39,7 @@ class RestaurantView(context: Context) : FrameLayout(context) {
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as
                 LayoutInflater
-        inflater.inflate(R.layout.restaurants,this)
+        inflater.inflate(R.layout.saved_restaurants,this)
         restaurantPicture = findViewById(R.id.restaurant_Image)
 
         title = findViewById(R.id.restaurant_name)
@@ -56,7 +56,7 @@ class RestaurantView(context: Context) : FrameLayout(context) {
      * sets all of the xml components from the restaurant values
      */
     fun loadElements(
-        restaurant: Restaurant, user: FirebaseUser?
+        restaurant: Restaurant, user: FirebaseUser?,tableLayout: TableLayout
     ) {
         val restaurantList = ArrayList<Restaurant>()
         var userId = ""
@@ -136,31 +136,34 @@ class RestaurantView(context: Context) : FrameLayout(context) {
 
         }
 
-             var isChecked = false
+
             heartButton.setOnClickListener {
                 if (user != null ){
-                    if (!isChecked){
-                        val childRef = reference.push()
-                        childRef.setValue(restaurant)
-                        heartButton.isChecked = true
-                        isChecked = true
-                    }else{
+                    if(heartButton.isChecked){
                         for (i in 0 until restaurantList.size){
                             if (restaurantList[i].equals(restaurant)){
+                               postDelayed({tableLayout.removeViewAt(i)},500)
                                 reference.child(keyList[i]).removeValue()
+
                                 break
                             }
                         }
                         heartButton.isChecked = false
-                        isChecked = false
                     }
-                }
+
+
+                    }
+
+                    }
+
+                    }
+
         }
 
 
 
-    }
 
-}
+
+
 
 

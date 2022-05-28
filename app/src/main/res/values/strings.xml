@@ -37,5 +37,7 @@
     <string name="apiKey">AIzaSyDn_CqnqNuY9Z1l0-giVyAbByfii_UXFnA</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="reset">Reset</string>
+    <string name="saved_restaurants">Saved Restaurants</string>
+    <string name="refresh">refresh</string>
 
 </resources>

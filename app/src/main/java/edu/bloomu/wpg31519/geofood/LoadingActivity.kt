@@ -7,11 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 
 
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -31,6 +30,9 @@ class LoadingActivity : AppCompatActivity() {
         const val JSON = "json"
         const val LATITUDE = "latitude"
         const val LONGITUDE = "longitude"
+        const val restaurantList = "Restaurant List"
+        const val keyList = "Key list"
+        const val noResults = "No Results"
 
 
     }
@@ -40,10 +42,10 @@ class LoadingActivity : AppCompatActivity() {
     private var priceLow:Int = 0
     private var priceHigh:Int = 0
     private var apiKey = ""
-
-
-
-
+    private var isDatabase  = false
+    private var keys = ArrayList<String>()
+    private var restaurants = ArrayList<Restaurant>()
+    private var isRefresh = false
 
 
 
@@ -54,82 +56,90 @@ class LoadingActivity : AppCompatActivity() {
         //Retrieve values from the main activity
         //1609.34 is the constant to convert miles to meters which is used for the api
         // instead of miles
-        radius = (intent.extras!!.getFloat(MainActivity.RADIUS) * 1609.34).toFloat()
-        latitude = intent.extras!!.getDouble(MainActivity.LATITUDE)
-        longitude = intent.extras!!.getDouble(MainActivity.LONGITUDE)
-        priceLow = intent.extras!!.getInt(MainActivity.PRICERANGELOW)
-        priceHigh = intent.extras!!.getInt(MainActivity.PRICERANGEHIGH)
-
-
-
-        //converts the minimum/maximum price into price levels where 1 is > 10
-        //2 is between 10 and 25 exclusive 3 = 25 - 50 exclusive and 4 if the price is
-        //greater than 50
-        val newLowPrice = when{
-            priceLow <= 10 ->1
-            priceLow in 11..24 -> 2
-            priceLow in 25..50 -> 3
-            priceLow > 50 -> 4
-            else->0
-        }
-        val newHighPrice =when{
-            priceHigh <= 10 ->1
-            priceHigh in 11..24 -> 2
-            priceHigh in 25..45 -> 3
-            priceHigh > 50 -> 4
-            else->0
-        }
-
-
-
-        //api url request with value from the main activity
-        val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
-                "//keyword=restaurant&location=$latitude%2C$longitude" +
-                "&radius=$radius" +
-                "&type=restaurant" +
-                "&operational=true" +
-                  "&opennow=true" +
-                "&minprice=$newLowPrice" +
-                "&maxprice=$newHighPrice" +
-                "&key=$apiKey"
-
-
-
-        // makes an http request on the io thread which is used for database calls and
-        // http request and saves them as json represented as strings
-        lifecycleScope.launch {
-           val jsonList:ArrayList<String> = ArrayList()
-            val result = getRequest(url)
-            jsonList.add(result)
-            val json  = JSONObject(result)
-            var pageToken = ""
-            if (json.has("next_page_token")){
-                 pageToken = json.get("next_page_token").toString()
+        isRefresh = intent.extras!!.getBoolean(SavedActivity.isRefresh)
+        if (!isRefresh){
+            radius = (intent.extras!!.getFloat(MainActivity.RADIUS) * 1609.34).toFloat()
+            latitude = intent.extras!!.getDouble(MainActivity.LATITUDE)
+            longitude = intent.extras!!.getDouble(MainActivity.LONGITUDE)
+            priceLow = intent.extras!!.getInt(MainActivity.PRICERANGELOW)
+            priceHigh = intent.extras!!.getInt(MainActivity.PRICERANGEHIGH)
+            isDatabase = intent.extras!!.getBoolean(MainActivity.isDatabase)
+            //converts the minimum/maximum price into price levels where 1 is > 10
+            //2 is between 10 and 25 exclusive 3 = 25 - 50 exclusive and 4 if the price is
+            //greater than 50
+            val newLowPrice = when {
+                priceLow <= 10 -> 1
+                priceLow in 11..24 -> 2
+                priceLow in 25..50 -> 3
+                priceLow > 50 -> 4
+                else -> 0
             }
-            while (pageToken != "") {
-                delay(1000) // page token isn't instantly valid so I delayed till
-                //it is valid
-                val newUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/" +
-                        "json?&pagetoken=$pageToken&key=$apiKey"
-                val nextResult = getRequest(newUrl)
-                jsonList.add(nextResult)
-                val nextJson = JSONObject(nextResult)
-                if (nextJson.has("next_page_token")){
-                    pageToken = nextJson.getString("next_page_token")
-                }else{
-                    pageToken = ""
+            val newHighPrice = when {
+                priceHigh <= 10 -> 1
+                priceHigh in 11..24 -> 2
+                priceHigh in 25..45 -> 3
+                priceHigh > 50 -> 4
+                else -> 0
+            }
+            if (!isDatabase) {
+                //api url request with value from the main activity
+                val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+                        "//keyword=restaurant&location=$latitude%2C$longitude" +
+                        "&radius=$radius" +
+                        "&type=restaurant" +
+                        "&operational=true" +
+                        "&opennow=true" +
+                        "&minprice=$newLowPrice" +
+                        "&maxprice=$newHighPrice" +
+                        "&key=$apiKey"
+
+
+                // makes an http request on the io thread which is used for database calls and
+                // http request and saves them as json represented as strings
+                lifecycleScope.launch {
+                    val jsonList: ArrayList<String> = ArrayList()
+                    val result = getRequest(url)
+                    jsonList.add(result)
+                    val json = JSONObject(result)
+                    var pageToken = ""
+                    if (json.has("next_page_token")) {
+                        pageToken = json.get("next_page_token").toString()
+                    }
+                    while (pageToken != "") {
+                        delay(1000) // page token isn't instantly valid so I delayed till
+                        //it is valid
+                        val newUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/" +
+                                "json?&pagetoken=$pageToken&key=$apiKey"
+                        val nextResult = getRequest(newUrl)
+                        jsonList.add(nextResult)
+                        val nextJson = JSONObject(nextResult)
+                        if (nextJson.has("next_page_token")) {
+                            pageToken = nextJson.getString("next_page_token")
+                        } else {
+                            pageToken = ""
+                        }
+                    }
+                    //launches a new page and sends the json strings
+                    val intent = Intent(
+                        this@LoadingActivity,
+                        ResultsActivity::class.java
+                    )
+                    intent.putExtra(JSON, jsonList)
+                    intent.putExtra(LATITUDE, latitude)
+                    intent.putExtra(LONGITUDE, longitude)
+
+                    finish()
+
+                    startActivity(intent)
                 }
+            }else{
+
+                getSavedRestaurants()
+
             }
-            //launches a new page and sends the json strings
-            val intent = Intent(this@LoadingActivity,
-                        ResultsActivity::class.java)
-            intent.putExtra(JSON,jsonList)
-            intent.putExtra(LATITUDE,latitude)
-            intent.putExtra(LONGITUDE,longitude)
 
-            finish()
-
-            startActivity(intent)
+        }else{
+            getSavedRestaurants()
         }
     }
 
@@ -162,6 +172,43 @@ class LoadingActivity : AppCompatActivity() {
 
         }
         return result
+    }
+    private  fun getSavedRestaurants(){
+
+        val user = FirebaseAuth.getInstance().currentUser
+        var reference:DatabaseReference? = null
+        if (user != null) {
+            val userKey = user.uid
+            reference = FirebaseDatabase.getInstance().getReference("Users")
+                .child(userKey).child("List")
+        }
+        reference?.addValueEventListener( object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    for (postSnapshot in snapshot.children) {
+                        val restaurant = postSnapshot.getValue(Restaurant::class.java)
+                        val key = postSnapshot.key.toString()
+
+                        if (restaurant != null) {
+                            keys.add(key)
+                            restaurants.add(restaurant)
+                        }
+
+                            val intent = Intent(this@LoadingActivity,SavedActivity::class.java)
+                            intent.putExtra(restaurantList,restaurants)
+                            intent.putExtra(keyList,keys)
+                            startActivity(intent)
+
+
+                    }
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+
     }
 
     /**
