@@ -10,11 +10,10 @@ the restaurants and used to get photos of the restaurant. Some
 challenges that I faced implementing this app is using geolocation 
 to get the current location of the user because I kept getting null 
 pointer exceptions and trying to do an http request from an android app.
-Some features I want to implement are adding a login and user experience 
-in geofood. With logging in they will be able to save some of the 
-restaurants that they like and they can look at all of the restaurants 
-that they have liked.I would also like on the main page being able to 
-search location by address from a search bar at the top of the page.
+Another bug that I ran into is when you un save a restaurant it will add
+another restaurant to the table layout so you just have to go home and 
+go back to the saved restaurants.
+
 
 How to Run the project 
 You need to download the code into android studio and have a google api key
